@@ -1,0 +1,95 @@
+#main
+{
+	text-align:center; 				
+	width:100%;
+	border-width:6px;
+	border-color:#9451bb;
+	border-style:double;
+}
+
+#header
+{
+	background-color:#9451bb;
+	color:white;	
+	text-align:center;
+}
+
+#header a
+{
+	color:white;
+	padding-left:40px;		
+}
+
+#myForm
+{
+	margin-top:30px;				
+	margin-left:auto;			
+	margin-right:auto;	
+	text-align:center;		
+}
+
+#t2
+{
+	margin-left:auto;			
+	margin-right:auto;		
+}
+
+#t1
+{					
+	margin-left:auto;			
+	margin-right:auto;
+	text-align:center; 
+	margin-bottom:100px;
+}
+
+#t1 tr:hover
+{
+	background-color:#9451bb;			
+}
+
+#tableDiv
+{
+	margin-left:auto;			
+	margin-right:auto;
+	text-align:center; 			
+}
+
+#footer
+{				
+	text-align:left;
+	clear:both;
+	background-color:#9451bb;
+	color:white;			
+}
+
+#wa
+{
+	float:right;
+	clear:both;	'
+	padding-right:10px;
+}
+
+#copyRights
+{
+	padding-left:10px;
+}
+
+.c0
+{
+	background-color:lightgrey;
+}
+
+.c1
+{
+	background-color:white;
+}
+
+.b0	
+{ 
+	font-weight: 400; 
+}
+
+.b1
+{ 
+	font-weight: 700; 
+}

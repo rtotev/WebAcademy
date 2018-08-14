@@ -1,0 +1,221 @@
+<!-- uncompleted! -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>FE2 Stz Ex</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+	<style type="text/css">
+		@import url('https://fonts.googleapis.com/css?family=Lobster&subset=cyrillic,cyrillic-ext');
+		
+		fieldset input{
+			display:block;
+		}
+		
+		form{
+			width: 20%;
+		}
+
+		body{
+			color: white;
+			background-image:url("bg.jpg");
+			background-repeat: no-repeat;
+			background-size: 100%;
+			background-attachment: fixed;
+			font-family: 'Lobster', cursive;
+		}
+		.red{
+			border: 1px solid red;
+			width:300;
+			height: 300;			
+		}
+		.dotted{
+			border: 1px dotted silver;
+		}
+		#main{
+			float:left;
+			width: 75%;
+
+		}
+		#text{
+			text-align: center;
+		}
+		
+		@media screen and (max-width: 480px) {
+  			body {
+   				 color: red; 
+  			}
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<button type="button" id="new" onclick="addNewPlanet();">New</button> <!-- open form which add new planet -->
+		<button type="button" id="save">Save</button> <!-- save added data in localStorage -->
+		<button type="button" id="load">Load</button> <!-- load in localStorage -->
+		<select id="selectPlanet" onchange="changePlanet();">			
+		</select>
+		<button type="button" id="bcgrdPlus"  class="resize" value="10">+</button> <!-- change background image size -->
+		<button type="button" id="bcgrdMinus" class="resize" value="-10">-</button> <!-- change background image size -->
+	</nav>
+	<div id="divForm">
+		<form>
+			<fieldset>				
+				<legend><mark>Add New</mark></legend>
+				<label for="name">Name: </label>
+				<input type="text" id="name" /><br />
+				<label for="url">URL: </label>
+				<input type="text" id="url" /><br />
+				<label for="section">Section: </label>
+				<input type="text" id="section" readonly="true" /><br />
+				<label for="pictur">Picture : </label>
+				<input type="text" id="picture" />
+				<br />	
+				<button type="button" id="sendForm">Add</button> <!-- add data to -->
+			</fieldset>
+		</form>
+	</div>
+	<div id="main" class="dotted">
+		<div id="text" class="dotted"></div>
+		<div id="img" class="dotted"><img class="dotted" src="" alt="no pic" /></div>
+		<div id="btnReadMore">
+			<button id="readMore" type="button">Read More</button> <!-- load more data from file --> 
+			<div id="readMoreData" class="red"></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+
+		// array with data planet 
+		var arr = [
+			{"name":"Earth", "url":"https://en.wikipedia.org/wiki/Earth", "section":"0", "picture":"earth.jpg"},
+			{"name":"Mars", "url":"https://en.wikipedia.org/wiki/Mars", "section":"1", "picture":"mars.jpeg"},
+			{"name":"Moon", "url":"https://en.wikipedia.org/wiki/Moon",  "section":"2", "picture":"moon.jpg"}
+		];
+
+
+		// fill select menu 
+		function optionPlanetFill(param){
+			
+			var tmp = '<option value="0">&nbsp;</option>';
+			for (var i = 0; i < arr.length; i++) {
+				tmp += '<option value="' + arr[i].name +'">' + arr[i].name +'</option>';	
+			}
+			$("#selectPlanet").html(tmp);
+			$("#section").attr('value', Number(arr.length + 1));
+		}
+		optionPlanetFill();
+
+		// change info for current selected planet
+		function changePlanet(par){
+			var sel = $("#selectPlanet").val();
+			var text, img; 
+			
+			if (arr.includes(par)){
+				sel = par;
+				console.log("sel: " + sel); 
+			}
+			if(sel == 0){
+				$("#main").hide();	
+			} 
+			else {
+				if(sel == 0 && typeof(localStorage) != "undefined"){
+					sel = par;
+				}
+				for (var i = 0; i < arr.length; i++) {
+					if(arr[i].name == sel){						
+						$("#text").html(arr[i].name);
+						$("#img img").attr('src', arr[i].picture);
+					}
+				}
+				$("#main").show();
+			}
+
+		}
+
+		changePlanet();
+
+
+		//change background size + -
+		
+		$(".resize").click( function(){
+						
+			var step =  parseInt($(this).val());
+			var currentBackgroundSize = $("body").css('background-size');
+			currentBackgroundSize = parseInt(currentBackgroundSize.replace(/%/g, ''));
+			var newBackgroundSize = currentBackgroundSize + step + "%";
+			console.log(step);
+			console.log(newBackgroundSize);
+			//console.log($("body").css({'background-size': value }));
+			
+			// Do something after 1 second 
+			setTimeout( function(){     			
+    			$("body").css({'background-size': newBackgroundSize});
+  			}, 1000);
+			
+		});
+
+
+		// add new planet		
+		$("#divForm").hide();
+		
+		function addNewPlanet(){
+			$("#divForm").show();
+		}
+
+		var name, url, section, picture;
+		$("#sendForm").click(function(){
+			name = $("#name").val();
+			url = $("#url").val();
+			section = $("#section").val();
+			picture = $("#picture").val();
+			arr.push({"name":name, "url":url,  "section":section, "picture":picture});
+			console.log(arr);
+			optionPlanetFill();
+			$("#divForm").hide();
+		});
+
+		// save array to localStorage
+		$("#save").click(function(){
+			if(typeof(localStorage) != 'undefined'){
+				var currentArr = JSON.stringify(arr);
+				
+				localStorage.setItem("arr", currentArr);
+
+				var curPlanetValue = $("#selectPlanet").val();  
+				localStorage.setItem("currentPlanet", curPlanetValue);
+
+				alert("Saved data");
+				//console.log(localStorage.getItem('arr'));
+			}else{alert("Can`t use this function");}
+				});
+
+		// load saved array from LocalStorage
+		$("#load").click(function(){
+			if(typeof(localStorage) != 'undefined'){
+				var loadArr = JSON.parse(localStorage.getItem("arr"));
+				
+				var curPlanet = localStorage.getItem("currentPlanet");
+				//console.log(curPlanet);
+				arr.length = 0;
+				arr = loadArr;
+				optionPlanetFill(loadArr);	
+				changePlanet(curPlanet);
+				console.log("curPlanet: " + curPlanet);
+
+				alert("Load saved data");
+			}
+			else{ 
+				alert("Can not use this function");
+			}
+		});
+			
+		//readMore 
+		// Doesn`t work - steel creating
+		$("#readMore").click(function(){
+			//console.log(af);
+			$("#readMoreData").load('load.php ' + arr[1]["url"]);
+			//console.log(1);	
+		});		
+	</script>
+</body>
+</html>
